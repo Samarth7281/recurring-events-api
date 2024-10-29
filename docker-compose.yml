@@ -1,0 +1,29 @@
+# version: '3'
+services:
+  db:
+    image: postgres:13
+    container_name: task_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tasks_db
+    ports:
+      - '5432:5432'
+
+  app:
+    build: .
+    container_name: nest_app
+    command: npm run start:dev
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tasks_db
+    ports:
+      - '3001:3001'
+    depends_on:
+      - db
+
+volumes:
+  pgdata: {}
